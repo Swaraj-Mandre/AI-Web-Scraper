@@ -5,7 +5,7 @@ const cheerio = require("cheerio");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
 app.use(cors());
 app.use(express.json());
@@ -62,28 +62,27 @@ Title: ${title}
 Content:
 ${text}`;
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": process.env.GEMINI_API_KEY,
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-      }),
-    }
-  );
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.3,
+    }),
+  });
 
   const data = await response.json();
 
   if (!response.ok) {
-    console.log("Gemini error:", data);
+    console.log("Groq error:", data);
     throw new Error("AI service failed to generate a summary");
   }
 
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "No summary returned.";
+  return data.choices?.[0]?.message?.content || "No summary returned.";
 }
 
 app.post("/api/summarize", async (req, res) => {
@@ -102,8 +101,8 @@ app.post("/api/summarize", async (req, res) => {
     return res.status(400).json({ error: "That does not look like a valid URL" });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(500).json({ error: "Server is missing the GEMINI_API_KEY" });
+  if (!process.env.GROQ_API_KEY) {
+    return res.status(500).json({ error: "Server is missing the GROQ_API_KEY" });
   }
 
   try {
