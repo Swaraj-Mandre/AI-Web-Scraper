@@ -4,7 +4,7 @@ Paste any article link and get a short, readable summary in a few seconds.
 
 The backend visits the page, pulls out the main text and sends it to an AI model (GPT-OSS 120B on Groq), which writes a quick summary with key points.
 
-**Live demo:** ADD_VERCEL_LINK_HERE
+**Live demo:** https://ai-web-scraper-red.vercel.app
 
 ## Tech stack
 

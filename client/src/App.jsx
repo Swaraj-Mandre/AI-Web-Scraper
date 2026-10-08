@@ -1,7 +1,8 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// remove trailing slash so we don't end up with //api
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/+$/, "");
 
 function App() {
   const [url, setUrl] = useState("");
