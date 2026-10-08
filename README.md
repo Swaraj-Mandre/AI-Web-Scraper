@@ -2,7 +2,7 @@
 
 Paste any article link and get a short, readable summary in a few seconds.
 
-The backend visits the page, pulls out the main text and sends it to an AI model (Llama 3.3 on Groq), which writes a quick summary with key points.
+The backend visits the page, pulls out the main text and sends it to an AI model (GPT-OSS 120B on Groq), which writes a quick summary with key points.
 
 **Live demo:** ADD_VERCEL_LINK_HERE
 
@@ -43,7 +43,7 @@ Create a `.env` file inside the `server` folder (next to `index.js`). You can co
 
 ```
 GROQ_API_KEY=your_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_MODEL=openai/gpt-oss-120b
 PORT=5000
 ```
 
